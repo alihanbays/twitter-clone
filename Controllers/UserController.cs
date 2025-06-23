@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using TwitterClone.Data;
 using TwitterClone.Models;
 
 namespace TwitterClone.Controllers
@@ -47,8 +45,47 @@ namespace TwitterClone.Controllers
 
             return Ok(new { Message = "User registered successfully." });
         }
+        [HttpPut("{username}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateUser(string username, UpdateUserDto updateDto)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            if (!string.IsNullOrEmpty(updateDto.Username) && updateDto.Username != username)
+            {
+                var existingUser = await _userManager.FindByNameAsync(updateDto.Username);
+                if (existingUser != null)
+                {
+                    return BadRequest("Username is already taken.");
+                }
+                user.UserName = updateDto.Username;
+            }
+
+            if (!string.IsNullOrEmpty(updateDto.Password))
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var passwordResult = await _userManager.ResetPasswordAsync(user, token, updateDto.Password);
+                if (!passwordResult.Succeeded)
+                {
+                    return BadRequest(passwordResult.Errors);
+                }
+            }
+
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
+            {
+                return BadRequest(updateResult.Errors);
+            }
+
+            return Ok(new { Message = "User updated successfully." });
+        }
 
         [HttpDelete("{username}")]
+        [Authorize]
         public async Task<IActionResult> DeleteUser(string username)
         {
             var user = await _userManager.FindByNameAsync(username);
