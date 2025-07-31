@@ -22,19 +22,22 @@ namespace Tests
         {
             var services = new ServiceCollection();
             services.AddLogging();
-            services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase(name));
+            services.AddDataProtection();
+
             services
-                .AddIdentityCore<User>(opts =>
-                {
-                    opts.Password.RequireDigit = false;
-                    opts.Password.RequireLowercase = false;
-                    opts.Password.RequireUppercase = false;
-                    opts.Password.RequireNonAlphanumeric = false;
-                })
-                .AddEntityFrameworkStores<AppDbContext>();
+            .AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase(name))
+            .AddIdentity<User, IdentityRole>(opts =>
+            {
+                opts.Password.RequireDigit = false;
+                opts.Password.RequireLowercase = false;
+                opts.Password.RequireUppercase = false;
+                opts.Password.RequireNonAlphanumeric = false;
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
 
             var provider = services.BuildServiceProvider();
-            var context = provider.GetRequiredService<AppDbContext>();
+            var context  = provider.GetRequiredService<AppDbContext>();
             context.Database.EnsureCreated();
             var userManager = provider.GetRequiredService<UserManager<User>>();
             return (context, userManager);
@@ -45,7 +48,7 @@ namespace Tests
         {
             var (context, userManager) = CreateIdentity(nameof(Register_AddsUser));
             var controller = new UserController(userManager);
-            var dto = new RegisterUserDto { Username = "alice", Password = "Password123" };
+            var dto = new RegisterUserDto { Username = "alice", Password = "pass123456789" };
 
             var result = await controller.Register(dto);
 
@@ -58,9 +61,9 @@ namespace Tests
         {
             var (context, userManager) = CreateIdentity(nameof(Register_DuplicateUsername_ReturnsBadRequest));
             var controller = new UserController(userManager);
-            await controller.Register(new RegisterUserDto { Username = "bob", Password = "pass" });
+            await controller.Register(new RegisterUserDto { Username = "bob", Password = "pass123456789" });
 
-            var result = await controller.Register(new RegisterUserDto { Username = "bob", Password = "pass" });
+            var result = await controller.Register(new RegisterUserDto { Username = "bob", Password = "pass123456789" });
 
             Assert.IsType<BadRequestObjectResult>(result);
         }
@@ -70,10 +73,10 @@ namespace Tests
         {
             var (context, userManager) = CreateIdentity(nameof(Login_ReturnsToken));
             var controller = new UserController(userManager);
-            await controller.Register(new RegisterUserDto { Username = "carol", Password = "pass" });
-            Environment.SetEnvironmentVariable("JWT_KEY", "testkey");
+            await controller.Register(new RegisterUserDto { Username = "carol", Password = "pass123456789" });
+            Environment.SetEnvironmentVariable("JWT_KEY", "supersecretkey_1234567823423894892384923849237423979790");
 
-            var result = await controller.Login(new LoginDto { Username = "carol", Password = "pass" }) as OkObjectResult;
+            var result = await controller.Login(new LoginDto { Username = "carol", Password = "pass123456789" }) as OkObjectResult;
 
             Assert.NotNull(result);
             Assert.True(((string?)result.Value?.GetType().GetProperty("Token")?.GetValue(result.Value))?.Length > 0);
@@ -84,7 +87,7 @@ namespace Tests
         {
             var (context, userManager) = CreateIdentity(nameof(GetAllUsers_ReturnsUsers));
             var controller = new UserController(userManager);
-            await controller.Register(new RegisterUserDto { Username = "dave", Password = "pass" });
+            await controller.Register(new RegisterUserDto { Username = "dave", Password = "pass123456789" });
 
             var actionResult = await controller.GetAllUsers();
             var result = Assert.IsType<OkObjectResult>(actionResult.Result);
@@ -99,7 +102,7 @@ namespace Tests
         {
             var (context, userManager) = CreateIdentity(nameof(DeleteUser_RemovesUser));
             var controller = new UserController(userManager);
-            await controller.Register(new RegisterUserDto { Username = "erin", Password = "pass" });
+            await controller.Register(new RegisterUserDto { Username = "erin", Password = "pass123456789" });
 
             var result = await controller.DeleteUser("erin");
 
@@ -113,8 +116,8 @@ namespace Tests
         {
             var (context, userManager) = CreateIdentity(nameof(UpdateUser_ChangesUsername));
             var controller = new UserController(userManager);
-            await controller.Register(new RegisterUserDto { Username = "old", Password = "pass" });
-            var result = await controller.UpdateUser("old", new UpdateUserDto { Username = "new", Password = "newpass" }) as OkObjectResult;
+            await controller.Register(new RegisterUserDto { Username = "old", Password = "pass123456789" });
+            var result = await controller.UpdateUser("old", new UpdateUserDto { Username = "new", Password = "newpass123456789" }) as OkObjectResult;
             Assert.NotNull(result);
             Assert.NotNull(await userManager.FindByNameAsync("new"));
         }
@@ -124,7 +127,7 @@ namespace Tests
         {
             var (context, userManager) = CreateIdentity(nameof(CreateTweet_AddsTweet));
             var controller = new TweetController(context, userManager);
-            await userManager.CreateAsync(new User { UserName = "ed" }, "pass");
+            await userManager.CreateAsync(new User { UserName = "ed" }, "pass123456789");
             var result = await controller.CreateTweet(new CreateTweetDto { Username = "ed", Content = "hi" }) as OkObjectResult;
             Assert.NotNull(result);
             var tweet = Assert.IsType<Tweet>(result.Value);
@@ -136,7 +139,7 @@ namespace Tests
         {
             var (context, userManager) = CreateIdentity(nameof(GetTweets_ReturnsTweets));
             var controller = new TweetController(context, userManager);
-            await userManager.CreateAsync(new User { UserName = "eve" }, "pass");
+            await userManager.CreateAsync(new User { UserName = "eve" }, "pass123456789");
             await controller.CreateTweet(new CreateTweetDto { Username = "eve", Content = "first" });
             var result = await controller.GetTweets() as OkObjectResult;
             Assert.NotNull(result);
@@ -150,7 +153,7 @@ namespace Tests
         {
             var (context, userManager) = CreateIdentity(nameof(UpdateTweet_UpdatesContent));
             var tweetController = new TweetController(context, userManager);
-            await userManager.CreateAsync(new User { UserName = "frank" }, "pass");
+            await userManager.CreateAsync(new User { UserName = "frank" }, "pass123456789");
             var createResult = await tweetController.CreateTweet(new CreateTweetDto { Username = "frank", Content = "hello" }) as OkObjectResult;
             var tweet = Assert.IsType<Tweet>(createResult!.Value);
 
@@ -165,7 +168,7 @@ namespace Tests
         {
             var (context, userManager) = CreateIdentity(nameof(DeleteTweet_RemovesTweet));
             var tweetController = new TweetController(context, userManager);
-            await userManager.CreateAsync(new User { UserName = "gary" }, "pass");
+            await userManager.CreateAsync(new User { UserName = "gary" }, "pass123456789");
             var create = await tweetController.CreateTweet(new CreateTweetDto { Username = "gary", Content = "yo" }) as OkObjectResult;
             var tweet = Assert.IsType<Tweet>(create!.Value);
 
