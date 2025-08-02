@@ -1,4 +1,5 @@
 using Frontend.Components;
+using TwitterClone.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
 var apiUrl = builder.Configuration["ApiBaseUrl"];
@@ -6,7 +7,11 @@ var apiUrl = builder.Configuration["ApiBaseUrl"];
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-
+builder.Services.AddScoped(sp =>
+    new HttpClient
+    {
+        BaseAddress = new Uri(apiUrl)
+    });
 
 var app = builder.Build();
 
