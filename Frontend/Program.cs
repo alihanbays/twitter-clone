@@ -1,10 +1,12 @@
 using Frontend.Components;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var apiUrl = builder.Configuration["ApiBaseUrl"];
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+
 
 var app = builder.Build();
 
