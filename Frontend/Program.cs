@@ -1,8 +1,7 @@
 using Frontend.Components;
-using TwitterClone.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
-var apiUrl = builder.Configuration["ApiBaseUrl"];
+//var apiUrl = builder.Configuration["ApiBaseUrl"];
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
@@ -10,7 +9,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddScoped(sp =>
     new HttpClient
     {
-        BaseAddress = new Uri(apiUrl)
+        BaseAddress = new Uri("http://localhost:5131/")
     });
 
 var app = builder.Build();
