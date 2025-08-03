@@ -1,0 +1,59 @@
+@page "/tweets"
+@attribute [StreamRendering]
+@inject HttpClient Http
+
+<PageTitle>Tweets</PageTitle>
+
+<h1>Tweets</h1>
+
+<p>Here your can find the latest tweets.</p>
+
+@if (tweets == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>UserID</th>
+                <th>Tweet</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tweet in tweets)
+            {
+                <tr>
+                    <td>@tweet.UserId</td>
+                    <td>@tweet.Content</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<TweetsClass>? tweets;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tweets = await Http.GetFromJsonAsync<List<TweetsClass>>("tweets");
+    }
+    public class TweetsClass
+    {
+        public int Id { get; set; }
+        public string Content { get; set; } = string.Empty;
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? UpdatedAt { get; set; }
+
+        public string UserId { get; set; } = string.Empty;
+    }
+}using Microsoft.AspNetCore.Http.HttpResults;
+#line default
+#line hidden
+#nullable restore
+#line (2, 12) - (2, 29) "/Users/alihanbaysal/Work/twitter-clone/Frontend/Components/Pages/Tweets.razor"
+    

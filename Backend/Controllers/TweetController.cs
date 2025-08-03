@@ -36,7 +36,7 @@ namespace TwitterClone.Controllers
             Tweet tweet = new()
             {
                 Content = dto.Content,
-                UserId = user.Id
+                User = user
             };
             _context.Tweets.Add(tweet);
             await _context.SaveChangesAsync();
