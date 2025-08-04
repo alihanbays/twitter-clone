@@ -17,7 +17,7 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>UserID</th>
+                <th>Username</th>
                 <th>Tweet</th>
             </tr>
         </thead>
@@ -25,7 +25,7 @@ else
             @foreach (var tweet in tweets)
             {
                 <tr>
-                    <td>@tweet.UserId</td>
+                    <td>@tweet.Username</td>
                     <td>@tweet.Content</td>
                 </tr>
             }
@@ -50,10 +50,6 @@ else
         public DateTime? UpdatedAt { get; set; }
 
         public string UserId { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
     }
-}using Microsoft.AspNetCore.Http.HttpResults;
-#line default
-#line hidden
-#nullable restore
-#line (2, 12) - (2, 29) "/Users/alihanbaysal/Work/twitter-clone/Frontend/Components/Pages/Tweets.razor"
-    
+}
