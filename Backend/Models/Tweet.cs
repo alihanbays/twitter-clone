@@ -15,6 +15,6 @@ namespace TwitterClone.Models
         public DateTime? UpdatedAt { get; set; }
 
         public string UserId { get; set; } = string.Empty;
-        public User? User { get; set; }
+        public string Username { get; set; } = string.Empty;
     }
 }
