@@ -19,7 +19,7 @@ A Twitter-like social media web application built with **C# and .NET**, featurin
 
 - **Backend**: C# (.NET 8 or higher)
 - **Frontend**: Razor Pages (or MVC Views) + HTML/CSS
-- **Database**: (Add your DB here if you used one, e.g., SQLite, SQL Server)
+- **Database**: SQLite
 - **Testing**: xUnit (or your chosen test framework)
 
 ---
@@ -42,7 +42,6 @@ A Twitter-like social media web application built with **C# and .NET**, featurin
 
 ### ✅ Prerequisites
 - [.NET SDK 8.0+](https://dotnet.microsoft.com/en-us/download)
-- (Optional) Database engine if you configured one
 
 ### ▶️ Run Locally
 
