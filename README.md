@@ -4,7 +4,7 @@ A Twitter-like social media web application built with **C# and .NET**, featurin
 
 ---
 
-## 🚀 Features
+## Features
 
 - **User Authentication**: Sign up, log in, and manage sessions.
 - **Tweeting**: Create, view, and delete tweets.
@@ -15,7 +15,7 @@ A Twitter-like social media web application built with **C# and .NET**, featurin
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend**: C# (.NET 8 or higher)
 - **Frontend**: Razor Pages (or MVC Views) + HTML/CSS
@@ -24,7 +24,7 @@ A Twitter-like social media web application built with **C# and .NET**, featurin
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 .
@@ -38,12 +38,12 @@ A Twitter-like social media web application built with **C# and .NET**, featurin
 
 ---
 
-## ⚙️ Getting Started
+## Getting Started
 
-### ✅ Prerequisites
+### Prerequisites
 - [.NET SDK 8.0+](https://dotnet.microsoft.com/en-us/download)
 
-### ▶️ Run Locally
+### Run Locally
 
 ```bash
 # Clone the repository
@@ -68,7 +68,7 @@ http://localhost:5000
 
 ---
 
-## 🧪 Running Tests
+## Running Tests
 
 ```bash
 dotnet test Tests/
@@ -76,7 +76,7 @@ dotnet test Tests/
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Here's how you can help:
 
@@ -97,7 +97,7 @@ Contributions are welcome! Here's how you can help:
 
 ---
 
-## 📜 License
+## License
 
 This project is open source and available under the **MIT License**.
 
