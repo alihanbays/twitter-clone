@@ -103,5 +103,5 @@ This project is open source and available under the **MIT License**.
 
 ---
 
-### 🙌 Acknowledgements
+### Acknowledgements
 Thanks to the .NET community and open-source contributors for making awesome tools and libraries!
