@@ -76,32 +76,5 @@ dotnet test Tests/
 
 ---
 
-## Contributing
-
-Contributions are welcome! Here's how you can help:
-
-1. Fork this repo
-2. Create your feature branch:  
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. Commit your changes:  
-   ```bash
-   git commit -m "Add new feature"
-   ```
-4. Push to the branch:  
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-5. Open a Pull Request
-
----
-
-## License
-
-This project is open source and available under the **MIT License**.
-
----
-
 ### Acknowledgements
 Thanks to the .NET community and open-source contributors for making awesome tools and libraries!
