@@ -73,8 +73,3 @@ http://localhost:5000
 ```bash
 dotnet test Tests/
 ```
-
----
-
-### Acknowledgements
-Thanks to the .NET community and open-source contributors for making awesome tools and libraries!
